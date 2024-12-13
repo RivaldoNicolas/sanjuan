@@ -1,0 +1,149 @@
+<!-- heredando la platilla base -->
+{% extends 'base.html' %}
+<!-- titulo de esta pagina carrito -->
+{% block title %} Carrito de Compras {% endblock %}
+<!-- contenido de la pagina carrito -->
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+{% block content %}
+<div class="container mt-5 p-5 animate__animated animate__fadeIn">
+    <h1 class="mb-4 text-center text-primary">Tu Carrito de Compras</h1>
+    <div class="row">
+        <div class="col-md-8">
+            <div class="card shadow-sm mb-4">
+                <div class="card-body">
+                    <h5 class="card-title mb-3">Productos en tu carrito</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for entry in carrito %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center animate__animated animate__fadeInLeft" style="animation-delay: {{ forloop.counter0 }}00ms;">
+                            <div>
+                                <h6 class="mb-0">{{ entry.item.producto.nombre }}</h6>
+                                <small class="text-muted">Cantidad: {{ entry.item.cantidad }}</small>
+                            </div>
+                            <span class="badge bg-primary rounded-pill">$ {{ entry.total_item }}</span>
+                        </li>
+                        {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-4">
+            <div class="card shadow-sm mb-4 animate__animated animate__fadeInRight">
+                <div class="card-body">
+                    <h5 class="card-title">Resumen de Compra</h5>
+                    <ul class="list-group list-group-flush">
+                        {% for entry in carrito %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center">
+                            {{ entry.item.producto.nombre }} x{{ entry.item.cantidad }}
+                            <span class="badge bg-primary rounded-pill">$ {{ entry.total_item }}</span>
+                        </li>
+                        {% endfor %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center fw-bold">
+                            <strong>Total:</strong>
+                            <span class="badge bg-success rounded-pill">$ {{ total }}</span>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+            <form action="{% url 'carrito' %}" method="post" class="mt-4 animate__animated animate__fadeInUp">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="direccion_envio" class="form-label">Dirección de Envío</label>
+                    <textarea class="form-control" id="direccion_envio" name="direccion_envio" rows="3" required></textarea>
+                </div>
+                <div class="mb-3">
+                    <label for="metodo_pago" class="form-label">Método de Pago</label>
+                    <select class="form-select" id="metodo_pago" name="metodo_pago" required>
+                        <option value="">Seleccione un método de pago</option>
+                        <option value="tarjeta">Tarjeta de Crédito</option>
+                        <option value="paypal">PayPal</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primary btn-lg w-100">Finalizar Compra</button>
+            </form>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+    .card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+    }
+    .list-group-item {
+        transition: background-color 0.3s ease-in-out;
+    }
+    .list-group-item:hover {
+        background-color: #f8f9fa;
+    }
+</style>
+{% endblock %}
+
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

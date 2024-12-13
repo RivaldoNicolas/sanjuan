@@ -1,0 +1,183 @@
+{% extends 'base.html' %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+{% block registrar %}
+<a href="{% url 'paginaLogin' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
+<a href="{% url 'PaginaNuevoCliente' %}" class="btn btn-outline-light">Registrarse</a>
+{% endblock %}
+
+{% block content %}
+<!-- Sección de Nosotros -->
+<section id="nosotros" class="py-4 bg-light animate__animated animate__fadeIn "></section>
+<div class="container p-4">
+    <h2 class="text-center mb-5 text-primary">{{ nosotros.tituloElBorrachoFiel }}</h2>
+    <div class="row align-items-center mb-5">
+        <div class="col-lg-6 mb-4 mb-lg-0 position-relative" style="height: 300px; overflow: hidden;">
+            {% if nosotros.imagenNosotros %}
+            <img src="{{ nosotros.imagenNosotros.url }}"
+                class="img-fluid rounded shadow-lg position-absolute animate__animated animate__fadeInLeft"
+                alt="Imagen de Nosotros"
+                style="top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; object-position: center top;" />
+            {% endif %}
+        </div>
+        <div class="col-lg-6 animate__animated animate__fadeInRight">
+            <h3 class="mb-4 text-secondary">{{ nosotros.titulo }}</h3>
+            <p class="lead text-muted">{{ nosotros.descripcion|linebreaks }}</p>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-6 animate__animated animate__fadeInUp">
+            <h3 class="mb-4 text-secondary">Nuestros Valores</h3>
+            <div class="card shadow-sm hover-card">
+                <div class="card-body">
+                    {{ nosotros.valores|safe }}
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6 mt-4 mt-md-0 animate__animated animate__fadeInUp" style="animation-delay: 0.2s;">
+            <h3 class="mb-4 text-secondary">Nuestro Equipo</h3>
+            <div class="card shadow-sm hover-card">
+                <div class="card-body">
+                    {{ nosotros.equipo|safe }}
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row mt-5">
+        <div class="col-md-12">
+            <h3 class="text-center mb-3">Testimonios</h3>
+            <div id="testimoniosCarousel" class="carousel slide" data-bs-ride="carousel">
+                <div class="carousel-inner">
+                    {% for testimonio in testimonios %}
+                    <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                        <blockquote class="blockquote text-center">
+                            <p class="mb-0">"{{ testimonio.contenido }}"</p>
+                            <br>
+                            <footer class="blockquote-footer">{{ testimonio.nombrepersona }}</footer>
+                        </blockquote>
+                    </div>
+                    {% endfor %}
+                </div>
+                <a class="carousel-control-prev" href="#testimoniosCarousel" role="button" data-bs-slide="prev">
+                    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Previous</span>
+                </a>
+                <a class="carousel-control-next" href="#testimoniosCarousel" role="button" data-bs-slide="next">
+                    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                    <span class="visually-hidden">Next</span>
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+</section>
+<style>
+    #nosotros {
+        padding-top: 50px;
+        background-color: #f8f9fa;
+    }
+
+    #nosotros h2,
+    #nosotros h3 {
+        color: #2c3e50;
+    }
+
+    #nosotros p {
+        color: #34495e;
+    }
+
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+        border-radius: 15px;
+    }
+
+    .hover-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    }
+
+    .text-primary {
+        color: #e74c3c !important;
+    }
+
+    .animate__animated {
+        animation-duration: 1s;
+    }
+
+    #testimoniosCarousel {
+        background-color: rgba(255, 255, 255, 0.8);
+        border-radius: 15px;
+        padding: 20px;
+    }
+
+    .carousel-control-prev-icon,
+    .carousel-control-next-icon {
+        background-color: #2c3e50;
+    }
+</style>
+{% endblock %}
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

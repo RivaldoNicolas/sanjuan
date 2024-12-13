@@ -1,0 +1,151 @@
+{% extends 'base.html' %}
+{% block title %}
+Registro Cliente
+{% endblock %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+{% block content %}
+<div class="container mt-5 p-5 animate__animated animate__fadeIn">
+    <div class="row justify-content-center">
+        <div class="col-md-8">
+            <div class="card shadow-lg">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0 text-center">Registro de Cliente</h4>
+                </div>
+                <div class="card-body">
+                    <form action="" method="post" class="animate__animated animate__fadeInUp">
+                        {% csrf_token %}
+                        <div class="row">
+                            <div class="col-md-6 mb-3">
+                                <label for="nombres" class="form-label">Nombres:</label>
+                                <input id="nombres" type="text" class="form-control" name="nombres" required>
+                            </div>
+                            <div class="col-md-6 mb-3">
+                                <label for="apellidos" class="form-label">Apellidos:</label>
+                                <input id="apellidos" type="text" class="form-control" name="apellidos" required>
+                            </div>
+                        </div>
+                        <div class="mb-3">
+                            <label for="dni" class="form-label">DNI:</label>
+                            <input id="dni" type="text" class="form-control" name="dni" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="telefono" class="form-label">Teléfono:</label>
+                            <input id="telefono" type="text" class="form-control" name="telefono" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="fecha_nacimiento" class="form-label">Fecha de Nacimiento:</label>
+                            <input id="fecha_nacimiento" type="date" class="form-control" name="fecha_nacimiento"
+                                required>
+                        </div>
+                        <div class="mb-4">
+                            <label for="direccion" class="form-label">Dirección:</label>
+                            <textarea id="direccion" class="form-control" name="direccion" rows="3" required></textarea>
+                        </div>
+                        <button type="submit"
+                            class="btn btn-primary w-100 animate__animated animate__pulse">Guardar</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-5px);
+    }
+
+    .form-control:focus {
+        border-color: #80bdff;
+        box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, .25);
+    }
+</style>
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if messages %}
+        {% for message in messages %}
+        Swal.fire({
+            icon: '{{ message.tags }}',
+            title: '{{ message }}',
+            showConfirmButton: true,
+            timer: 3000
+        });
+        {% endfor %}
+        {% endif %}
+    });
+</script>
+{% endblock %}
+
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

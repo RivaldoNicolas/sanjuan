@@ -1,0 +1,138 @@
+<!-- heredando el contenido de la platilla base -->
+{% extends 'base.html' %}
+<!-- titulo de esta pagina-->
+{% block title %} Registro de Usuario {% endblock %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+<!-- contenido de esta pagina registrar -->
+{% block content %}
+<!-- llamado al fondo de pantalla con Django -->
+{% load static %}
+<!-- diseño del contenido general de registro -->
+<div class="container-fluid d-flex align-items-center justify-content-center vh-100"
+    style="background-image: url('{% static 'images/fondologin.jpg' %}'); background-size: cover; background-position: center;">
+    <div class="bg-dark bg-opacity-75 p-5 rounded-lg w-100 shadow" style="max-width: 500px;">
+        <div class="d-flex justify-content-center mb-4">
+            <img src="{% static 'images/fondo-bg.avif' %}" class="rounded-circle border border-light" width="100"
+                height="100" alt="Avatar">
+        </div>
+        <h2 class="text-center text-white mb-4">Regístrate</h2>
+        <!-- formulario para registrarse -->
+        <form method="post">
+            {% csrf_token %}
+            <!-- <div class="row mb-3">
+                <div class="col">
+                    <input type="text" class="form-control rounded-pill" placeholder="Nombre" name="nombre" id="nombre"
+                        required>
+                </div>
+                <div class="col">
+                    <input type="text" class="form-control rounded-pill" placeholder="Apellido" name="apellido"
+                        id="apellido" required>
+                </div>
+            </div> -->
+            <div class="mb-3">
+                <input type="email" class="form-control rounded-pill" placeholder="Email" name="nuevoCliente"
+                    id="correo" required>
+            </div>
+            <div class="mb-3">
+                <input type="password" class="form-control rounded-pill" placeholder="Contraseña" name="nuevaClave"
+                    id="contrasena" required>
+            </div>
+            <!-- <div class="mb-3">
+                <input type="text" class="form-control rounded-pill" placeholder="Dirección" name="direccion"
+                    id="direccion" required>
+            </div>
+            <div class="mb-3">
+                <label for="fecha_nacimiento" class="form-label text-white">Fecha de Nacimiento</label>
+                <input type="date" class="form-control rounded-pill" name="fecha_nacimiento" id="fecha_nacimiento"
+                    required>
+            </div> -->
+            <!-- boton que envia el registro -->
+            <button type="submit"
+                class="btn btn-primary w-100 rounded-pill d-flex align-items-center justify-content-center">
+                <i class="bi bi-person-plus-fill me-2"></i> Enviar
+            </button>
+        </form>
+    </div>
+</div>
+<!-- Script para mostrar mensajes -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% if messages %}
+        {% for message in messages %}
+        Swal.fire({
+            icon: '{{ message.tags }}',  // 'success', 'error', etc.
+            title: '{{ message }}',
+            showConfirmButton: true,
+            timer: 3000
+        });
+        {% endfor %}
+        {% endif %}
+    });
+</script>
+{% endblock %}
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

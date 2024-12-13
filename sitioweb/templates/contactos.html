@@ -1,0 +1,122 @@
+{% extends 'base.html' %}
+{% block title %}
+Página Contacto
+{% endblock %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+{% block registrar %}
+<a href="{% url 'paginaLogin' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
+<a href="{% url 'PaginaNuevoCliente' %}" class="btn btn-outline-light">Registrarse</a>
+{% endblock %}
+
+{% block content %}
+<!-- Sección Contacto -->
+<section id="contactos" class="py-5 bg-light">
+    <div class="container p-5">
+        <h2 class="text-center mb-4">Contáctanos</h2>
+        <div class="row">
+            <div class="col-md-6">
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="nombre" class="form-label">Nombre</label>
+                        <input type="text" class="form-control" id="nombre" name="nombre" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="correo" class="form-label">Email</label>
+                        <input type="email" class="form-control" id="correo" name="correo" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="mensaje" class="form-label">Mensaje</label>
+                        <textarea class="form-control" id="mensaje" name="mensaje" rows="4" required></textarea>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        Enviar Mensaje
+                    </button>
+                </form>
+            </div>
+            <div class="col-md-6">
+                <h4>Visítanos</h4>
+                <p>{{ contacto_sitio.lugar }}</p>
+                <div class="mb-3">
+                    <div class="map-responsive">
+                        <iframe src="{{ contacto_sitio.mapaurl }}" width="100%" height="300" frameborder="0"
+                            style="border:0" allowfullscreen="" aria-hidden="false" tabindex="0"></iframe>
+                    </div>
+                </div>
+                <h4>Llámanos</h4>
+                <p>{{ contacto_sitio.telefono }}</p>
+                <h4>Horario de Atención</h4>
+                <p>{{ contacto_sitio.horario_atencion }}</p>
+               
+            </div>
+        </div>
+    </div>
+</section>
+{% endblock %}
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ cotacto_sitio_yo.lugar }}
+        </p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i>
+            {{cotacto_sitio_yo.telefono}}</p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{cotacto_sitio_yo.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

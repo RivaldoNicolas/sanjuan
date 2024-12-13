@@ -1,0 +1,188 @@
+<!-- heredando el contenido de la platilla base -->
+{% extends 'base.html' %}
+<!-- titulo de esta pagina productos -->
+{% block title %} Página de Productos {% endblock %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+<!-- contenido de la pagina de productos -->
+{% block registrar %}
+<a href="{% url 'paginaLogin' %}" class="btn btn-outline-light me-2">Iniciar Sesión</a>
+<a href="{% url 'PaginaNuevoCliente' %}" class="btn btn-outline-light">Registrarse</a>
+{% endblock %}
+{% block content %}
+<!-- contenido general de la pagina -->
+<div class="container-fluid mt-5">
+    <!-- encabezado y su imagen -->
+    <div class="bg-primary p-4 rounded-lg shadow mb-4" id="FondoEncabezado">
+        <h1 class="text-center mb-4 text-white font-weight-bold">Nuestros Productos Corona</h1>
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <form class="d-flex">
+                    <input class="form-control me-2" type="search" placeholder="Buscar productos" aria-label="Search">
+                    <button class="btn btn-outline-light" type="submit">Buscar</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <!-- todos los productos agregados -->
+    <div class="row row-cols-1 row-cols-md-2 row-cols-lg-4 g-4" id="productosContainer">
+        <!-- Bucle de una lista de productos usando jinja -->
+        {% for producto in productos %}
+        <div class="col mb-4 producto-item">
+            <div class="card h-100 card-hover shadow">
+                <img src="{{ producto.imagen.url }}" class="card-img-top" alt="{{ producto.nombre }}">
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title font-weight-bold">{{ producto.nombre }}</h5>
+                    <p class="card-text flex-grow-1">{{ producto.descripcion }}</p>
+                    <p class="card-text text-primary font-weight-bold">Precio: S/.{{ producto.precio }}</p>
+                    <form action="" method="post">
+                        {% csrf_token %}
+                        <input type="hidden" name="producto_id" value="{{ producto.id }}">
+                        <div class="input-group mb-3">
+                            <input type="number" name="cantidad" value="1" min="1" class="form-control">
+                            <button type="submit" class="btn btn-success">Comprar</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+<!-- manejo de error en cuadro de dialogo -->
+{% if messages %}
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        {% for message in messages %}
+        Swal.fire({
+            icon: '{{ message.tags }}',
+            title: '{{ message }}',
+            showConfirmButton: true,
+            timer: 3000
+        });
+        {% endfor %}
+    });
+</script>
+{% endif %}
+<!-- estilo general de esta pagina productos -->
+<style>
+    body {
+        background-color: #f0f0f0;
+    }
+
+    #FondoEncabezado {
+        background: linear-gradient(135deg, #4e54c8, #8f94fb);
+    }
+
+    .card-hover {
+        transition: transform 0.3s, box-shadow 0.3s;
+    }
+
+    .card-hover:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    }
+
+    .card-img-top {
+        height: 200px;
+        object-fit: cover;
+    }
+</style>
+<!-- codigo java para hacer interactivo los productos -->
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchInput = document.querySelector('input[type="search"]');
+        const productos = document.querySelectorAll('.producto-item');
+
+        searchInput.addEventListener('input', function () {
+            const searchTerm = this.value.toLowerCase();
+            productos.forEach(producto => {
+                const title = producto.querySelector('.card-title').textContent.toLowerCase();
+                const description = producto.querySelector('.card-text').textContent.toLowerCase();
+                if (title.includes(searchTerm) || description.includes(searchTerm)) {
+                    producto.style.display = '';
+                } else {
+                    producto.style.display = 'none';
+                }
+            });
+        });
+
+        const cards = document.querySelectorAll('.card-hover');
+        cards.forEach(card => {
+            card.addEventListener('mouseover', () => {
+                card.style.transform = 'scale(1.05)';
+                card.style.boxShadow = '0 6px 12px rgba(0, 0, 0, 0.2)';
+            });
+            card.addEventListener('mouseout', () => {
+                card.style.transform = 'scale(1)';
+                card.style.boxShadow = 'none';
+            });
+        });
+    });
+</script>
+{% endblock %}
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}

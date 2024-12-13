@@ -1,0 +1,130 @@
+<!-- heredando el contenido base -->
+{% extends 'base.html' %}
+<!-- titulo de esta pagina -->
+{% block title %} Dashboard {% endblock %}
+{% block Principal %}
+<a class="navbar-brand" href="{% url 'inicio' %}">
+    <img src="{{nosotros.logo.url}}" alt="" height="40">
+    {{ nosotros.tituloElBorrachoFiel }}
+</a>
+{% endblock %}
+<!-- contenido de esta pagina -->
+{% block registrar %}
+<a href="" class="btn btn-outline-light me-2">{{ cliente.nombres }}</a>
+<a href="{% url 'SalirCliente' %}" class="btn btn-outline-light">Cerrar Sesion</a>
+{% endblock %}
+{% block content %}
+<div class="container-fluid py-5 mt-5 animate__animated animate__fadeIn">
+    <div class="jumbotron text-center bg-primary text-white rounded-lg shadow-lg p-5">
+        <h1 class="display-4 animate__animated animate__bounceInDown">¡Bienvenido, {{ cliente.nombres }}!</h1>
+        <p class="lead animate__animated animate__fadeInUp">¡Qué alegría tenerte de vuelta!</p>
+        <hr class="my-4 bg-light">
+        <div class="row justify-content-center mt-5">
+            <div class="col-md-4 mb-3">
+                <div class="card bg-light animate__animated animate__zoomIn" style="animation-delay: 0.2s;">
+                    <div class="card-body text-center">
+                        <i class="bi bi-box-seam display-4 text-primary mb-3"></i>
+                        <h5 class="card-title">Ver Productos</h5>
+                        <p class="card-text">Explora nuestra selección de productos.</p>
+                        <a href="/productos" class="btn btn-primary btn-lg mt-3">Ver Productos</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-light animate__animated animate__zoomIn" style="animation-delay: 0.4s;">
+                    <div class="card-body text-center">
+                        <i class="bi bi-cart-fill display-4 text-warning mb-3"></i>
+                        <h5 class="card-title">Ver Carrito</h5>
+                        <p class="card-text">Revisa los productos que has añadido al carrito.</p>
+                        <a href="/carrito" class="btn btn-warning btn-lg mt-3">Ver Carrito</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4 mb-3">
+                <div class="card bg-light animate__animated animate__zoomIn" style="animation-delay: 0.6s;">
+                    <div class="card-body text-center">
+                        <i class="bi bi-person-plus-fill display-4 text-success mb-3"></i>
+                        <h5 class="card-title">Registro</h5>
+                        <p class="card-text">Termina de Registrar tus datos correspondientes.</p>
+                        <a href="{% url 'paginaRegistroCliente' %}" class="btn btn-success btn-lg mt-3">Completar
+                            Registro</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .card {
+        transition: transform 0.3s ease-in-out, box-shadow 0.3s ease-in-out;
+    }
+
+    .card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0, 0, 0, 0.2);
+    }
+</style>
+{% endblock %}
+
+
+{% block Pie_Pagina %}
+<style>
+    .footer-icon {
+        transition: transform 0.3s ease-in-out, color 0.3s ease-in-out;
+    }
+
+    .footer-icon:hover {
+        transform: scale(1.2);
+    }
+
+    .footer-link:hover {
+        text-decoration: underline !important;
+    }
+</style>
+<div class="row">
+    <div class="col-md-4">
+        <h4 class="text-light">El Borracho Fiel</h4>
+        <p class="text-light">&copy; 2024. Todos los derechos reservados.</p>
+        <p class="text-light"><i class="bi bi-geo-alt-fill footer-icon text-danger"></i> {{ contacto_sitio.lugar }}</p>
+        <p class="text-light"><i class="bi bi-telephone-fill footer-icon text-success"></i> {{ contacto_sitio.telefono}}
+        </p>
+        <p class="text-light"><i class="bi bi-clock-fill footer-icon text-warning"></i>
+            {{contacto_sitio.horario_atencion }}</p>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Enlaces</h4>
+        <ul class="list-unstyled">
+            <li><a href="{% url 'inicio' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-house-door-fill footer-icon text-primary"></i> Inicio</a></li>
+            <li><a href="{% url 'nosotros' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-info-circle-fill footer-icon text-info"></i> Acerca de</a></li>
+            <li><a href="{% url 'productos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-box-seam footer-icon text-warning"></i> Productos</a></li>
+            <li><a href="{% url 'contactos' %}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-envelope-fill footer-icon text-success"></i> Contacto</a></li>
+        </ul>
+    </div>
+    <div class="col-md-4">
+        <h4 class="text-light">Síguenos</h4>
+        <ul class="list-unstyled">
+            {% if contacto_sitio.facebook_url %}
+            <li><a href="{{ contacto_sitio.facebook_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-facebook footer-icon text-primary"></i> Facebook</a></li>
+            {% endif %}
+            {% if contacto_sitio.twitter_url %}
+            <li><a href="{{ contacto_sitio.twitter_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-twitter footer-icon text-info"></i> Twitter</a></li>
+            {% endif %}
+            {% if contacto_sitio.instagram_url %}
+            <li><a href="{{ contacto_sitio.instagram_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-instagram footer-icon text-danger"></i> Instagram</a></li>
+            {% endif %}
+            {% if contacto_sitio.whatsapp_url %}
+            <li><a href="{{ contacto_sitio.whatsapp_url }}" class="text-light text-decoration-none footer-link"><i
+                        class="bi bi-whatsapp footer-icon text-success"></i> WhatsApp</a></li>
+            {% endif %}
+        </ul>
+    </div>
+</div>
+{% endblock %}
